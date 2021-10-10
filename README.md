@@ -10,6 +10,11 @@ Json
 String library 
 Random Library
 
+# Installation
+clone the git repo
+install tk using pip
+run the file
+
 # Planned Features in future
 1. Better Design 
 2. More optimized
