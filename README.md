@@ -12,7 +12,9 @@ Random Library
 
 # Installation
 clone the git repo
+
 install tk using pip
+
 run the file
 
 # Planned Features in future
