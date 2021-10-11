@@ -7,19 +7,17 @@ import random
 import os
 
 
-#https://stackoverflow.com/questions/61607367/how-to-encrypt-json-in-python
-
-
 window = Tk() # instantiate of a window
 window.geometry("600x400")
 window.title("Password Manager")
 window.config(background="#F7672D")
 
+#Declaration of some objects
 site_text=StringVar()
 password_text=StringVar()
 uname_text=StringVar()
 
-
+#function to copy password into your clipboard
 def copy_button():
 
     if password_text.get()=="":
@@ -31,6 +29,7 @@ def copy_button():
     clip.clipboard_append(password_text.get())  
     clip.destroy()
 
+#function to generate password of length 15
 def generate():
     characters = list(string.ascii_letters + string.digits + "!@#$%^&*()")
     length = 15
@@ -48,12 +47,13 @@ def generate():
     password_text.set("".join(password))
 
 
-
+#function to save data into a JSON file
 def Save():
     name=site_text.get()
     password=password_text.get()
     uname=uname_text.get()
 
+#Error message
     if password=="" or name=="" or uname=="":
         messagebox.showerror("Error","Site or password field cannot be empty")
     
@@ -65,7 +65,7 @@ def Save():
             "Password": password
         }
 
- #update the file with contents not overwrite it
+#if json file not made
         if not os.path.exists('/pass.json'):
                 json_obj = {}
                 json_obj['Details'] = []
@@ -90,24 +90,19 @@ def Save():
         password_text.set("")
         uname_text.set("")
 
-        #save into json file
-
-
-
+#Function for Opening a new window to create password
 def Create_fun():
-    # Toplevel object which will
-    # be treated as a new window
+
     newWindow = Toplevel(window)
  
-    # sets the title of the
-    # Toplevel widget
+
     newWindow.title("Create your stuff")
  
-    # sets the geometry of toplevel
+
     newWindow.geometry("600x400")
     newWindow.config(background="#F7672D")
  
-    # A Label widget to show in toplevel
+
     Label(newWindow,
     text ="Create a new password").grid(row=0,column=1,pady=10)
 
@@ -123,7 +118,7 @@ def Create_fun():
     Button(newWindow,text="Generate a password " , command=generate,fg="#00FF00",bg="black").grid(row=4,column=1,pady=10)
     Button(newWindow,text="Save",command=Save,fg="#00FF00",bg="black").grid(row=5,column=1,pady=10)
 
-
+#Function for Opening a new window to save your pasts password
 def Save_fun():
  
     newWindow = Toplevel(window)
@@ -144,7 +139,7 @@ def Save_fun():
 
     Button(newWindow,text="Save",command=Save,fg="#00FF00",bg="black",pady=10).grid(row=4,column=1)
     
-
+#Function for Opening a new window to show password of a particular website
 def Show_fun():
     newWindow=Toplevel(window)
     newWindow.title("Show your stuff")
@@ -153,6 +148,8 @@ def Show_fun():
     Label(newWindow,text="Show passwords").grid(row=0,column=1,pady=10)
 
     Label(newWindow,text="Site name : ").grid(row=1,pady=10)
+	
+#List box to choose a site
     lbox=Listbox(newWindow)
     lbox.grid(row=1,column=2) 
     
@@ -166,12 +163,13 @@ def Show_fun():
             except JSONDecodeError:
                 pass
 
-
+#inserting the website's name into the ListBox
     for i in sites:
         lbox.insert(lbox.size(),i)
 
     lbox.config(height=lbox.size())
 
+#Function to show username and password when a selecting a particular website
     def Show():
         Selected=lbox.get(lbox.curselection())
         with open("pass.json","r+") as jfile:
@@ -193,10 +191,10 @@ def Show_fun():
     Button(newWindow,text="Show",command=Show,fg="#00FF00",bg="black",pady=10).grid(row=4,column=1,pady=10)
     Button(newWindow,text="Copy Pasword",command=copy_button,fg="#00FF00",bg="black",pady=10).grid(row=5,column=1,pady=10)
 
-    
+#Stuff for Main Window  
 Label(window,text="PASSWORD MANAGER",font=(20)).pack(pady=10)
 
-create =Button(window,text="Create",command=Create_fun,fg="#00FF00",bg="black") #remove parenthis of function after placing it
+create =Button(window,text="Create",command=Create_fun,fg="#00FF00",bg="black")
 create.pack(pady=10)
 
    
