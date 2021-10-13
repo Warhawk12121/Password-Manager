@@ -4,12 +4,11 @@ from tkinter import messagebox
 import json
 import string
 import random
-import os
 
 
 window = Tk() # instantiate of a window
-window.geometry("600x400")
-window.title("Password Manager")
+window.geometry("600x400") #dimensions of the window
+window.title("Password Manager") 
 window.config(background="#F7672D")
 
 #Declaration of some objects
@@ -46,7 +45,6 @@ def generate():
     random.shuffle(password)
     password_text.set("".join(password))
 
-
 #function to save data into a JSON file
 def Save():
     name=site_text.get()
@@ -65,43 +63,30 @@ def Save():
             "Password": password
         }
 
-#if json file not made
-        if not os.path.exists('/pass.json'):
-                json_obj = {}
-                json_obj['Details'] = []
-                
-                with open('pass.json','w') as jfile:
-                    json.dump(json_obj, jfile)
-                    
-                with open("pass.json","r+") as jfile:
-                    data=json.load(jfile)
-                    data["Details"].append(password_dict)
-                    jfile.seek(0)
-                    json.dump(data,jfile,indent=2)
-        else:
-            with open("pass.json","r+") as jfile:
-                    data=json.load(jfile)
-                    data["Details"].append(password_dict)
-                    jfile.seek(0)
-                    json.dump(data,jfile,indent=2)
-
+ 
+        with open("pass.json","r+") as jfile:
+            try:
+                data=json.load(jfile)
+                data["Details"].append(password_dict)
+                jfile.seek(0)
+                json.dump(data,jfile,indent=2)
+            except JSONDecodeError:
+                pass
 
         site_text.set("")
         password_text.set("")
         uname_text.set("")
 
+        #save into json file
+
+
 #Function for Opening a new window to create password
 def Create_fun():
-
+    # Toplevel object which will be treated as a new window
     newWindow = Toplevel(window)
- 
-
     newWindow.title("Create your stuff")
- 
-
     newWindow.geometry("600x400")
     newWindow.config(background="#F7672D")
- 
 
     Label(newWindow,
     text ="Create a new password").grid(row=0,column=1,pady=10)
@@ -148,11 +133,11 @@ def Show_fun():
     Label(newWindow,text="Show passwords").grid(row=0,column=1,pady=10)
 
     Label(newWindow,text="Site name : ").grid(row=1,pady=10)
-	
-#List box to choose a site
+    #List box to choose a site
     lbox=Listbox(newWindow)
     lbox.grid(row=1,column=2) 
     
+    #storing the site name in a list
     sites=[]
     with open("pass.json","r+") as jfile:
             try:
@@ -180,7 +165,9 @@ def Show_fun():
                             password_text.set(i["Password"])
                             uname_text.set(i["Username"])
                 except JSONDecodeError:
-                    pass 
+                    pass
+    
+    #site_entry = Entry(newWindow,textvariable = site_text,width=20,state=DISABLED).grid(row=1,column=2) 
 
     Label(newWindow,text="Username : ").grid(row=2,pady=10)
     uname_entry=Entry(newWindow,textvariable=uname_text,state=DISABLED).grid(row=2,column=2)
@@ -191,10 +178,11 @@ def Show_fun():
     Button(newWindow,text="Show",command=Show,fg="#00FF00",bg="black",pady=10).grid(row=4,column=1,pady=10)
     Button(newWindow,text="Copy Pasword",command=copy_button,fg="#00FF00",bg="black",pady=10).grid(row=5,column=1,pady=10)
 
+
 #Stuff for Main Window  
 Label(window,text="PASSWORD MANAGER",font=(20)).pack(pady=10)
 
-create =Button(window,text="Create",command=Create_fun,fg="#00FF00",bg="black")
+create =Button(window,text="Create",command=Create_fun,fg="#00FF00",bg="black") #remove parenthis of function after placing it
 create.pack(pady=10)
 
    
