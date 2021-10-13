@@ -4,6 +4,7 @@ from tkinter import messagebox
 import json
 import string
 import random
+import os
 
 
 window = Tk() # instantiate of a window
@@ -51,7 +52,6 @@ def Save():
     password=password_text.get()
     uname=uname_text.get()
 
-#Error message
     if password=="" or name=="" or uname=="":
         messagebox.showerror("Error","Site or password field cannot be empty")
     
@@ -63,21 +63,35 @@ def Save():
             "Password": password
         }
 
- 
-        with open("pass.json","r+") as jfile:
-            try:
+ #If json file does not exits , create it and append it
+        if not os.path.exists('pass.json'):
+            json_obj = {}
+            json_obj['Details'] = [
+                
+            ]
+                
+            with open('pass.json','w') as jfile:
+                json.dump(json_obj, jfile)
+            
+              
+            with open("pass.json","r+") as jfile:
                 data=json.load(jfile)
                 data["Details"].append(password_dict)
                 jfile.seek(0)
                 json.dump(data,jfile,indent=2)
-            except JSONDecodeError:
-                pass
+
+        else:
+            with open("pass.json","r+") as jfile:
+                data=json.load(jfile)
+                data["Details"].append(password_dict)
+                jfile.seek(0)
+                json.dump(data,jfile,indent=2)
+
 
         site_text.set("")
         password_text.set("")
         uname_text.set("")
 
-        #save into json file
 
 
 #Function for Opening a new window to create password
