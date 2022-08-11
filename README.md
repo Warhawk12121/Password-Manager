@@ -14,12 +14,16 @@ Random Library
 clone the git repo
 
 install tk using pip
+```
+pip install tk
+```
 
-run the file
+run the .py file
+exe Application will made later
 
 # Planned Features in future
 1. Better Design 
 2. More optimized
-3. Json encrypted 
+3. Json encryption
 
 
